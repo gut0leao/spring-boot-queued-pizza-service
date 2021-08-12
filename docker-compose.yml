@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+
+  db:
+    build: ./containers/db
+    container_name: db
+    environment:
+      POSTGRES_USER: pizzaservice
+      POSTGRES_PASSWORD: pizzaservice00
+      POSTGRES_DB: pizzaservice
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
