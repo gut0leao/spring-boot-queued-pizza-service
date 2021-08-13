@@ -19,7 +19,9 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import tk.gutoleao.springbootqueuedpizzaservice.converter.LocalDateTimeAttributeConverter;
 import tk.gutoleao.springbootqueuedpizzaservice.enums.EnumOrderStatus;
 
@@ -27,11 +29,13 @@ import tk.gutoleao.springbootqueuedpizzaservice.enums.EnumOrderStatus;
 @Table(name = "orders_history", schema = "pizzaservice", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "order_history_id") })
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderHistory {
 
 	@Id
 	@GeneratedValue(generator = "sq_order_history", strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "sq_order_history", sequenceName = "pizzaservice.orders_history", schema = "pizzaservice", allocationSize = 1, initialValue = 1)
+	@SequenceGenerator(name = "sq_order_history", sequenceName = "pizzaservice.sq_order_history", schema = "pizzaservice", allocationSize = 1, initialValue = 1)
 	@Column(name = "order_history_id")
 	private Long id;
 
@@ -47,6 +51,12 @@ public class OrderHistory {
 	@JoinColumn(name = "order_id", nullable = false)
 	@JsonIgnore
 	private Order order;
+
+	public OrderHistory(EnumOrderStatus status, LocalDateTime updatedAt, Order order) {
+		this.status = status;
+		this.updatedAt = updatedAt;
+		this.order = order;
+	}
 
 	@Override
 	@JsonIgnore

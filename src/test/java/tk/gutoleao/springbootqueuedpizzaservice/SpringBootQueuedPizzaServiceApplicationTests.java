@@ -1,4 +1,4 @@
-package tk.gutoleao.springbootqueuedpizzaservice.springbootqueuedpizzaservice;
+package tk.gutoleao.springbootqueuedpizzaservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

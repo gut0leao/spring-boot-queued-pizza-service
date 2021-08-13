@@ -23,18 +23,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import tk.gutoleao.springbootqueuedpizzaservice.converter.LocalDateTimeAttributeConverter;
 import tk.gutoleao.springbootqueuedpizzaservice.enums.EnumOrderStatus;
 
 @Entity
 @Table(name = "orders", schema = "pizzaservice", uniqueConstraints = { @UniqueConstraint(columnNames = "order_id") })
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 
     @Id
-    @GeneratedValue(generator = "sq_orders", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "sq_orders", sequenceName = "pizzaservice.orders", schema = "pizzaservice", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(generator = "sq_order", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sq_order", sequenceName = "pizzaservice.sq_order", schema = "pizzaservice", allocationSize = 1, initialValue = 1)
     @Column(name = "order_id")
     private Long id;
 
@@ -63,7 +67,7 @@ public class Order {
         try {
             return mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            return String.format("{\"id\": \"%d\" }", this.id);
+            return String.format("{\"id\": \"%d\", \"description\": \"%s\"}", this.id, this.getDescription());
         }
     }
 

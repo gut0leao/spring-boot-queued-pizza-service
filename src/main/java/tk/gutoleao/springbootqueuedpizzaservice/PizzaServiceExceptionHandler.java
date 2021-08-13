@@ -1,4 +1,4 @@
-package tk.gutoleao.springbootqueuedpizzaservice.springbootqueuedpizzaservice;
+package tk.gutoleao.springbootqueuedpizzaservice;
 
 import java.util.concurrent.ThreadLocalRandom;
 

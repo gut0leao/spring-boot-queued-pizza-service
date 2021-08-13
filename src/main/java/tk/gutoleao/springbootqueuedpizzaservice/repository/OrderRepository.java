@@ -9,7 +9,7 @@ import tk.gutoleao.springbootqueuedpizzaservice.model.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
-    @Query("SELECT a FROM Order o WHERE o.id = :id")
+    @Query("SELECT o FROM Order o WHERE o.id = :id")
     Order getOrderById(@Param("id") Long id);
 
 }
