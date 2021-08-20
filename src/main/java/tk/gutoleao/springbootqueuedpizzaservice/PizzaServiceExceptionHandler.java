@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import lombok.extern.slf4j.Slf4j;
 import tk.gutoleao.springbootqueuedpizzaservice.exception.InvalidOrderException;
+import tk.gutoleao.springbootqueuedpizzaservice.exeption.ResourceNotFoundException;
 import tk.gutoleao.springbootqueuedpizzaservice.to.ApiErrorTo;
 
 @RestControllerAdvice
@@ -16,6 +17,7 @@ import tk.gutoleao.springbootqueuedpizzaservice.to.ApiErrorTo;
 public class PizzaServiceExceptionHandler {
 
     private static final String MESSAGE_UNEXPECTED_ERROR = "Unexpected error: ";
+    private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource not found.";
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiErrorTo> exception(final Exception e) {
@@ -41,6 +43,12 @@ public class PizzaServiceExceptionHandler {
         log.warn(e.getMessage(), e);
         ApiErrorTo apiError = new ApiErrorTo(HttpStatus.BAD_REQUEST, e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorTo> exception() {
+        ApiErrorTo apiError = new ApiErrorTo(HttpStatus.NOT_FOUND, MESSAGE_RESOURCE_NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
 
 }

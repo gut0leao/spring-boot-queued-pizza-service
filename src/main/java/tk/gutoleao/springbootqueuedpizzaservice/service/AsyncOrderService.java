@@ -6,29 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
 import tk.gutoleao.springbootqueuedpizzaservice.enums.EnumOrderStatus;
 import tk.gutoleao.springbootqueuedpizzaservice.model.Order;
 
 @Service
-@Slf4j
 public class AsyncOrderService {
 
     @Autowired
-    private OrderService service;
+    private OrderService orderService;
 
     @Autowired
-    private OrderTaskExecutorService orderTaskExecutorService;
+    OrderThreadPoolTaskExecutorService threadPoolTaskExecutorService;
 
     @Async("orderTaskExecutor")
     public CompletableFuture<Order> processar(Order order) throws InterruptedException {
-        orderTaskExecutorService.addToRunningMap(Thread.currentThread().getName(), order);
-        service.updateHistory(order, EnumOrderStatus.PREPARING);
+
+        threadPoolTaskExecutorService.orderProcessingStarted(Thread.currentThread().getName(), order);
+        orderService.updateHistory(order, EnumOrderStatus.PREPARING);
         Thread.sleep(10000);
-        service.updateHistory(order, EnumOrderStatus.DELIVERING);
+        orderService.updateHistory(order, EnumOrderStatus.DELIVERING);
         Thread.sleep(10000);
-        service.updateHistory(order, EnumOrderStatus.DELIVERED);
-        orderTaskExecutorService.removeFromRunningMap(Thread.currentThread().getName(), order);
+        orderService.updateHistory(order, EnumOrderStatus.DELIVERED);
+        threadPoolTaskExecutorService.orderProcessingEnded(Thread.currentThread().getName());
 
         return CompletableFuture.completedFuture(order);
     }

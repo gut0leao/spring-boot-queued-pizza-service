@@ -11,12 +11,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import tk.gutoleao.springbootqueuedpizzaservice.exception.InvalidOrderException;
+import tk.gutoleao.springbootqueuedpizzaservice.exeption.ResourceNotFoundException;
 import tk.gutoleao.springbootqueuedpizzaservice.model.Order;
 import tk.gutoleao.springbootqueuedpizzaservice.service.OrderService;
 
@@ -41,7 +43,13 @@ public class OrderController {
 
         @GetMapping("/orders")
         public List<Order> findAllOrders() {
-                return service.findAllOrders();
+                return service.findAll();
+        }
+
+        @GetMapping("/order/{id}")
+        public Order findById(@PathVariable Long id) throws ResourceNotFoundException {
+                log.debug(String.valueOf(id));
+                return service.getOrderById(id);
         }
 
 }

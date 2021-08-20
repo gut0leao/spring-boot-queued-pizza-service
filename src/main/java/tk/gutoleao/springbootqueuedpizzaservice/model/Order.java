@@ -57,7 +57,8 @@ public class Order {
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime lastUpdate;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<OrderHistory> history = new ArrayList<>();
 
     @Override
@@ -67,7 +68,7 @@ public class Order {
         try {
             return mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            return String.format("{\"id\": \"%d\", \"description\": \"%s\"}", this.id, this.getDescription());
+            return String.format("{\"id\": \"%d\", \"description\": \"%s\", \"status\": \"%s\"}", this.id, this.getDescription(), this.getStatus());
         }
     }
 
